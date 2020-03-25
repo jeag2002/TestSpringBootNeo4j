@@ -1,0 +1,5 @@
+FROM openjdk:8-jdk-alpine
+VOLUME ["spring-cloud-config-repo","/tmp"]
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+CMD java -Xmx512m -Djava.security.egd=file:/dev/./urandom -jar /app.jar
