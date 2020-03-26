@@ -69,5 +69,4 @@ public class Meal {
 	    
 	    this.meals.add(name);
 	 }
-	
 }

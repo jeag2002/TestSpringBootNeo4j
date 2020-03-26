@@ -67,4 +67,11 @@ public class Plain {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	
+	@Override
+	public String toString() {
+		return "[PLAIN] id " +  this.id + " name " +  this.name;
+				
+	}
 }

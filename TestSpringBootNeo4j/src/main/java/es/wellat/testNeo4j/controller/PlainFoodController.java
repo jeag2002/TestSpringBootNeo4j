@@ -3,6 +3,8 @@ package es.wellat.testNeo4j.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +17,9 @@ import es.wellat.testNeo4j.services.PlainService;
 @RestController
 @RequestMapping("/")
 public class PlainFoodController {
+	
+	
+	Logger log = LoggerFactory.getLogger(PlainFoodController.class);
 	
 	private final PlainService plainService;
 	
@@ -33,7 +38,7 @@ public class PlainFoodController {
     	String ingredientsPtr = ingredients == null? "*":ingredients;
     	
     	
-    	System.out.println("GRAPH limitInfo " + limitInfo + " course " +  coursePtr +  " ingredients " +  ingredientsPtr);
+    	log.info("[CONTROLLER] GRAPH limitInfo " + limitInfo + " course " +  coursePtr +  " ingredients " +  ingredientsPtr);
     	
 		return plainService.graphD3(limitInfo,coursePtr,ingredientsPtr);
 	}
@@ -45,7 +50,7 @@ public class PlainFoodController {
     	String coursePtr = course == null? "*":course;
     	String ingredientsPtr = ingredients == null? "*":ingredients;
     	
-    	System.out.println("QUERY limitInfo " + limitInfo + " course " +  coursePtr +  " ingredients " +  ingredientsPtr);
+    	log.info("[CONTROLLER] QUERY limitInfo " + limitInfo + " course " +  coursePtr +  " ingredients " +  ingredientsPtr);
     	
     	return plainService.query(limitInfo, coursePtr, ingredientsPtr);
     	

@@ -29,7 +29,10 @@ public class Neo4jConfiguration {
 		return args ->{
 			
 			//wait 10 seconds before neo4j bolt interface finished to launch
+			
+			log.info("[NEOCONFIG] wait 10 seconds. launch neo4j docker");
 			TimeUnit.SECONDS.sleep(10);
+			log.info("[NEOCONFIG] 10 passed. run test data");
 			
 			plainRepository.deleteAll(); 
 			
@@ -154,6 +157,8 @@ public class Neo4jConfiguration {
 		    plain_2.addMeals(meal_9);
 		    
 		    plainRepository.save(plain_2);
+		    
+		    log.info("[NEOCONFIG] data saved in NEO4J!");
 		    
 		};
 		

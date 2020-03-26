@@ -1,26 +1,37 @@
 package es.wellat.testNeo4j.services;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.wellat.testNeo4j.controller.PlainFoodController;
 import es.wellat.testNeo4j.model.Course;
 import es.wellat.testNeo4j.model.Dish;
 import es.wellat.testNeo4j.model.Meal;
 import es.wellat.testNeo4j.model.Plain;
 import es.wellat.testNeo4j.model.response.ResponseBean;
 import es.wellat.testNeo4j.repositories.PlainRepository;
+import es.wellat.testNeo4j.repositories.session.QuerySession;
 
 
 @Service
 public class PlainService {
 	
+	Logger log = LoggerFactory.getLogger(PlainService.class);
+
+	
+	@Autowired
+	QuerySession qS;
 	
 	private final PlainRepository plainRepository;
 	
@@ -124,8 +135,8 @@ public class PlainService {
 			
 		}
 		
-		System.out.println("nodes " + nodes.toString());
-		System.out.println("links " + rels.toString());
+		log.info("[PLAINSERVICE] nodes " + nodes.toString());
+		log.info("[PLAINSERVICE] links " + rels.toString());
 		
 		return map("nodes", nodes, "links", rels);
 	}
@@ -152,19 +163,47 @@ public class PlainService {
 	 private Collection<Plain> graph(int limit, String course, String ingredients){
 
 		   Collection<Plain> result = null;
+		   
+		   List<String> courses = new ArrayList<String>();
+		   List<String> ingredientL = new ArrayList<String>();
+		   
 		 
 			if (!course.equalsIgnoreCase("*") && ingredients.equalsIgnoreCase("*")) {
 				
-				result = plainRepository.graphCourse(course);
+				String data[] = course.split(",");
+				courses = Arrays.asList(data);
+				
+				if (courses.size() == 1) {
+					result = plainRepository.graphCourse(courses.get(0));
+				}else {
+					result = qS.courses(courses);
+				}
+				
 				
 			}else if (!course.equalsIgnoreCase("*") && !ingredients.equalsIgnoreCase("*")) {
 				
-				result = plainRepository.graphCourseNoIngredient(course, ingredients);
+				String data[] = course.split(",");
+				courses = Arrays.asList(data);
+				
+				data = ingredients.split(",");
+				ingredientL = Arrays.asList(data);
+				
+				if ((courses.size() == 1) && (ingredientL.size() == 1)) {
+					result = plainRepository.graphCourseNoIngredient(courses.get(0), ingredientL.get(0));
+				}else {
+					log.info("[PLAINSERVICE] not yet implemented");
+				}
 				
 			}else if (course.equalsIgnoreCase("*") && !ingredients.equalsIgnoreCase("*")) {
-					
-				result = plainRepository.graphNoIngredient(ingredients);
 				
+				String data[] = ingredients.split(",");
+				ingredientL = Arrays.asList(data);
+				
+				if (ingredientL.size() == 1) {
+					result = plainRepository.graphNoIngredient(ingredients);
+				}else {
+					log.info("[PLAINSERVICE] not yet implemented");
+				}
 	 		}else {
 				result = plainRepository.graph(limit);
 			}

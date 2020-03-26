@@ -1,5 +1,6 @@
 package es.wellat.testNeo4j.repositories;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public interface PlainRepository extends Neo4jRepository<Plain, Long>{
 	//@Query("MATCH (p:Plain)-[m:MEAL]-(c:Course)-[d:DISH]-(l:Plate) WHERE c.type = {course}  RETURN * LIMIT 100")
 	//neo4j-v4 (docker)
 	@Query("MATCH (p:Plain)-[m:MEAL]-(c:Course)-[d:DISH]-(l:Plate) WHERE c.type = $course  RETURN * LIMIT 100")
-	Collection<Plain> graphCourse(@Param("course") String courseType);
+	Collection<Plain> graphCourse(@Param("course") String course);
 	
 	//FILTER of NO INGREDIENT
 	//FILTER of COURSE AND NO INGREDIENT
@@ -34,14 +35,14 @@ public interface PlainRepository extends Neo4jRepository<Plain, Long>{
 	//@Query("MATCH (p:Plain)-[m:MEAL]-(c:Course)-[d:DISH]-(l:Plate) WHERE not exists((p)-[:MEAL]-(c)-[:DISH]-(:Plate {name: {ingredient}}))  RETURN * LIMIT 100 ")
     //neo4j-v4 (docker)
 	@Query("MATCH (p:Plain)-[m:MEAL]-(c:Course)-[d:DISH]-(l:Plate) WHERE not exists((p)-[:MEAL]-(c)-[:DISH]-(:Plate {name: $ingredient}))  RETURN * LIMIT 100 ")
-	Collection<Plain> graphNoIngredient(@Param("ingredient")String ingredient);
+	Collection<Plain> graphNoIngredient(@Param("ingredient") String ingredient);
 	
 	//FILTER of COURSE AND NO INGREDIENT
 	//neo4j-v3
 	//@Query("MATCH (p:Plain)-[m:MEAL]-(c:Course)-[d:DISH]-(l:Plate) WHERE c.type = {course} and not exists((p)-[:MEAL]-(c)-[:DISH]-(:Plate {name: {ingredient}}))  RETURN * LIMIT 100 ")
 	//neo4j-v4 (docker)
 	@Query("MATCH (p:Plain)-[m:MEAL]-(c:Course)-[d:DISH]-(l:Plate) WHERE c.type = $course and not exists((p)-[:MEAL]-(c)-[:DISH]-(:Plate {name: $ingredient}))  RETURN * LIMIT 100 ")
-	Collection<Plain> graphCourseNoIngredient(@Param("course")String courseType, @Param("ingredient")String ingredient);
+	Collection<Plain> graphCourseNoIngredient(@Param("course") String course, @Param("ingredient") String ingredient);
 	
 	
 	

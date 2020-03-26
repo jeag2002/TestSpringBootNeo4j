@@ -92,6 +92,10 @@ public class Course {
 		this.type = type;
 	}
 	
+	@Override
+	 public String toString() {
+		 return "[COURSE] id " + this.id  + " name " + this.name;
+	 }
 	  
 
 }
